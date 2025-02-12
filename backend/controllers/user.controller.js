@@ -34,14 +34,16 @@ export const signup = async (req, res) => {
                         message: "email not exist",
                     })
                 }
+                const code = Math.floor(100000 + Math.random() * 900000).toString()
+
                 const hashPassword = await bcryptjs.hash(String(password), 10)
                 const newUser = new User({
                     name,
                     email,
-                    password: hashPassword
+                    password: hashPassword,
+                    verificationCode:code
                 })
                 await newUser.save()
-                const code = Math.floor(100000 + Math.random() * 900000).toString()
                 await sendMailer(newUser.email, code)
                 return res.status(200).json({
                     message: "user created successfully",
@@ -70,19 +72,20 @@ export const login = async (req, res) => {
         const user = await User.findOne({ email })
 
         if (!user) {
-            console.log("wrong email");
-
             res.status(400).json({ message: "invalid eamil" })
             return
         }
         const isPassMatch = await bcryptjs.compare(String(password), String(user.password))
 
         if (!isPassMatch) {
-            console.log("wrong  password");
-
-            res.status(400).json({ message: "wrong password" })
+                res.status(400).json({ message: "wrong password" })
             return
 
+        }
+        if(user.verified === false){
+            res.status(400).json({ message: "not verified please signup again" })
+            await User.deleteOne({email})
+            return
         }
         res.status(200).json({ message: "login successfully", user: user })
         return
@@ -92,4 +95,31 @@ export const login = async (req, res) => {
         return
 
     }
+}
+
+export const verifyUserController = async(req, res) =>{
+    try {
+        const { verificationCode } = req.body
+        const userexist = await User.findOne({ verificationCode })
+        if(!userexist){
+            res.status(400).json({message:"wrong otp"})
+           return
+        }
+        userexist.verified = true
+        userexist.code=undefined
+        await userexist.save()
+        res.status(200).json({message:"email verified registered successfully", user:userexist})
+        await sendMailer(userexist.email, "login successfully")
+        return
+       
+       
+        
+    } catch (error) {
+        //  const y = await User.deleteOne({verificationCode})
+        console.log("verification: ", error.message)
+        // console.log(y)
+        res.status(400).json({ message: "verification failed" })
+        return
+
+    }   
 }

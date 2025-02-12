@@ -7,6 +7,7 @@ import Login from './components/Login'
 import Contact from './components/Contact'
 
 import { isAuthenticated } from './auth/auth'
+import VerifyEmail from './components/VerifyEmail'
 
 function App() {
   const yes = isAuthenticated()
@@ -18,6 +19,7 @@ function App() {
       <Route path='/signup'element={<Signup />} />
       <Route path='/login'element={<Login />} />
       <Route path='/contact'element={<Contact />} />
+      <Route path='/verification' element={<VerifyEmail />} />
     </Routes>
     </div>
   )

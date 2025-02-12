@@ -24,10 +24,7 @@ function Signup() {
 
     await axios.post(`https://bookstore-zxds.onrender.com/user/signup`, newUser)
       .then((res) => {
-        console.log(res.data);
-          toast.success(res.data.message);
-          localStorage.setItem("user", JSON.stringify(res.data.user))
-          navigate("/")
+          navigate("/verification")
       })
       .catch((error)=>{
         console.error("Error:", error.response?.data || error.message);
