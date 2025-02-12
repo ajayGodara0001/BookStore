@@ -5,6 +5,7 @@ import axios from "axios"
 import { useNavigate } from 'react-router-dom';
 function VerifyEmail({}) {
     const navigate = useNavigate()
+    const backend_url = import.meta.env.VITE_BACKEND_URI
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const onSubmit = async (data) =>{
@@ -12,7 +13,7 @@ function VerifyEmail({}) {
         verificationCode:data.verificationCode
         }
         
-    await axios.post(`https://bookstore-zxds.onrender.com/user/verifyUser`, otp)
+    await axios.post(`${backend_url}/user/verifyUser`, otp)
     .then((res) => {
        toast.success(res.data.message);
        localStorage.setItem("user", JSON.stringify(res.data.user))

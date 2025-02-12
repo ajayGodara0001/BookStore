@@ -14,9 +14,10 @@ function Login() {
       email: data.email,
       password: data.password
     };
-  
+    const backend_url = import.meta.env.VITE_BACKEND_URI
+
     
-    await axios.post(`https://bookstore-zxds.onrender.com/user/login`, user)
+    await axios.post(`${backend_url}/user/login`, user)
       .then((res) => {
         console.log(res.data);
           toast.success(res.data.message);

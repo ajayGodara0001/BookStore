@@ -9,10 +9,13 @@ function CoursePage() {
  
   const Navigate = useNavigate()
  const [book, setBook] = useState([])
+ const backend_url = import.meta.env.VITE_BACKEND_URI
+
+
  useEffect(()=>{
   const getBook = async () =>{
     try {
-      const res = fetch("https://bookstore-zxds.onrender.com/book")
+      const res = fetch(`${backend_url}/book`)
       console.log("rewedfddds")
          } catch (error) {
       console.log(error)

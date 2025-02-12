@@ -20,9 +20,11 @@ function Signup() {
       name:data.name,
       password:data.password
     }         
+    const backend_url = import.meta.env.VITE_BACKEND_URI
 
+ 
 
-    await axios.post(`https://bookstore-zxds.onrender.com/user/signup`, newUser)
+    await axios.post(`${backend_url}/user/signup`, newUser)
       .then((res) => {
           navigate("/verification")
       })
