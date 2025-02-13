@@ -53,8 +53,11 @@ export const signup = async (req, res) => {
                
             })
             .catch(error => {
-                console.log(error);
-                return
+                console.log(error)
+                return res.status(400).json({
+                    message: "email api expired"
+                })
+                
             });
        
 
